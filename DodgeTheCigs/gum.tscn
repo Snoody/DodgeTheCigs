@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://xn8q7xjtilfn"]
+
+[ext_resource type="Texture2D" uid="uid://chipsoweiceot" path="res://art/gum.png" id="1_mmbby"]
+[ext_resource type="Script" path="res://gum.gd" id="1_yfuyt"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fjwkx"]
+size = Vector2(32, 40)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7e0ng"]
+radius = 260.0
+
+[node name="Gum" type="RigidBody2D" groups=["gums"]]
+collision_mask = 0
+gravity_scale = 0.0
+script = ExtResource("1_yfuyt")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.6, 0.42)
+texture = ExtResource("1_mmbby")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_fjwkx")
+
+[node name="ExplodeArea" type="Area2D" parent="."]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExplodeArea"]
+shape = SubResource("CircleShape2D_7e0ng")
+disabled = true
+
+[connection signal="body_entered" from="ExplodeArea" to="." method="_on_explode_area_body_entered"]

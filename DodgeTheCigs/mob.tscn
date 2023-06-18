@@ -1,0 +1,68 @@
+[gd_scene load_steps=7 format=3 uid="uid://ba3eyspulqhj8"]
+
+[ext_resource type="Script" path="res://mob.gd" id="1_2daoo"]
+[ext_resource type="Texture2D" uid="uid://ww8w44r1i8ag" path="res://art/cig.png" id="2_edqwr"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xamv3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_edqwr")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_pujb1"]
+radius = 7.0
+height = 135.0
+
+[sub_resource type="Animation" id="Animation_mm8b7"]
+resource_name = "spin"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.000207608, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 6.28319]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mj75v"]
+_data = {
+"spin": SubResource("Animation_mm8b7")
+}
+
+[node name="Mob" type="RigidBody2D" groups=["mobs"]]
+rotation = 6.28319
+collision_mask = 0
+gravity_scale = 0.0
+script = ExtResource("1_2daoo")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+use_parent_material = true
+position = Vector2(-64, 0)
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_xamv3")
+animation = &"walk"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-65, 0)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_pujb1")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." groups=["mobs"]]
+position = Vector2(-122, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_mj75v")
+}
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
